@@ -23,15 +23,20 @@ fun HelloScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Hello, ${state.name} ${state.surname}",
-            style = MaterialTheme.typography.headlineMedium
-        )
+
+        Text("Welcome", style = MaterialTheme.typography.headlineMedium)
 
         Spacer(Modifier.height(20.dp))
 
+        Text(
+            text = "Hello, ${state.name} ${state.surname}",
+            style = MaterialTheme.typography.headlineSmall
+        )
+
+        Spacer(Modifier.height(24.dp))
+
         OutlinedButton(onClick = onBack) {
-            Text("Go back")
+            Text("Back")
         }
     }
 }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.prog7313.sandbox.viewmodel.PersonViewModel
@@ -21,8 +22,14 @@ fun FormScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        Text("Fill to continue", style = MaterialTheme.typography.headlineMedium)
+
+        Spacer(Modifier.height(20.dp))
+
         OutlinedTextField(
             value = state.name,
             onValueChange = personVm::setName,
@@ -45,10 +52,15 @@ fun FormScreen(
 
         Button(
             onClick = onContinue,
-            enabled = canContinue,
-            modifier = Modifier.fillMaxWidth()
+            enabled = canContinue
         ) {
             Text("Continue")
+        }
+
+        Spacer(Modifier.height(24.dp))
+
+        OutlinedButton(onClick = onBack) {
+            Text("Back")
         }
     }
 }

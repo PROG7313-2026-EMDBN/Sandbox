@@ -7,6 +7,9 @@ import androidx.navigation.compose.rememberNavController
 import com.prog7313.sandbox.ui.FormScreen
 import com.prog7313.sandbox.ui.HelloScreen
 import com.prog7313.sandbox.viewmodel.PersonViewModel
+import com.prog7313.sandbox.model.sampleGadgets
+import com.prog7313.sandbox.ui.GadgetsScreen
+import com.prog7313.sandbox.ui.HomeScreen
 
 @Composable
 fun AppNavGraph(
@@ -15,12 +18,21 @@ fun AppNavGraph(
 ) {
     val navController = rememberNavController()
 
-    NavHost( navController = navController, startDestination = Routes.FORM) {
+    NavHost(navController = navController, startDestination = Routes.HOME) {
+
+        composable(Routes.HOME) {
+            HomeScreen(
+                onOpenForm = { navController.navigate(Routes.FORM) },
+                onOpenGadgets = { navController.navigate(Routes.GADGETS) },
+                onExit = onExit
+            )
+        }
+
         composable(Routes.FORM) {
             FormScreen(
                 personVm = personVm,
                 onContinue = { navController.navigate(Routes.HELLO) },
-                onBack = { if (!navController.popBackStack()) onExit() }
+                onBack = { navController.popBackStack() }
             )
         }
 
@@ -31,6 +43,11 @@ fun AppNavGraph(
             )
         }
 
-
+        composable(Routes.GADGETS) {
+            GadgetsScreen(
+                gadgets = sampleGadgets,
+                onBack = { navController.popBackStack() } // goes back to HOME
+            )
+        }
     }
 }
