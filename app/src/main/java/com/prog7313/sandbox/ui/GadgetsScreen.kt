@@ -1,39 +1,53 @@
-package com.prog7313.sandbox.ui
-
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.prog7313.sandbox.model.Gadget
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.prog7313.sandbox.ui.GadgetViewModel
 import com.prog7313.sandbox.util.shareGadget
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GadgetsScreen(
-    gadgets: List<Gadget>,
-    onBack: () -> Unit
+    gadgetVm: GadgetViewModel,
+    onBack: () -> Unit,
+    onAdd: () -> Unit
 ) {
     val context = LocalContext.current
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Gadgets", style = MaterialTheme.typography.headlineSmall)
+    val gadgetsState = gadgetVm.gadgets.collectAsStateWithLifecycle()
+    val gadgets = gadgetsState.value
 
-        Spacer(Modifier.height(20.dp))
-
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Gadgets") },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                actions = {
+                    IconButton(onClick = onAdd) {
+                        Icon(Icons.Filled.Add, contentDescription = "Add gadget")
+                    }
+                }
+            )
+        }
+    ) { padding ->
         LazyColumn(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(16.dp)
         ) {
             items(
                 items = gadgets,
@@ -56,12 +70,6 @@ fun GadgetsScreen(
                     }
                 }
             }
-        }
-
-        Spacer(Modifier.height(24.dp))
-
-        OutlinedButton(onClick = onBack) {
-            Text("Back")
         }
     }
 }

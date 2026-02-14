@@ -1,21 +1,26 @@
 package com.prog7313.sandbox.navigation
 
+import AddGadgetScreen
+import GadgetsScreen
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.prog7313.sandbox.model.Gadget
 import com.prog7313.sandbox.ui.FormScreen
 import com.prog7313.sandbox.ui.HelloScreen
 import com.prog7313.sandbox.viewmodel.PersonViewModel
-import com.prog7313.sandbox.model.sampleGadgets
-import com.prog7313.sandbox.ui.GadgetsScreen
+import com.prog7313.sandbox.ui.GadgetViewModel
 import com.prog7313.sandbox.ui.HomeScreen
 
 @Composable
 fun AppNavGraph(
-    personVm: PersonViewModel,
     onExit: () -> Unit
 ) {
+    val personVm: PersonViewModel = viewModel()
+    val gadgetVm: GadgetViewModel = viewModel()
+
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = Routes.HOME) {
@@ -45,8 +50,19 @@ fun AppNavGraph(
 
         composable(Routes.GADGETS) {
             GadgetsScreen(
-                gadgets = sampleGadgets,
-                onBack = { navController.popBackStack() } // goes back to HOME
+                gadgetVm = gadgetVm,
+                onBack = { navController.popBackStack() },
+                onAdd = { navController.navigate(Routes.ADD_GADGET) }
+            )
+        }
+
+        composable(Routes.ADD_GADGET) {
+            AddGadgetScreen(
+                onBack = { navController.popBackStack() },
+                onSave = { newGadget: Gadget ->
+                    gadgetVm.addGadget(newGadget)
+                    navController.popBackStack()
+                }
             )
         }
     }

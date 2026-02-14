@@ -5,4 +5,5 @@ object Routes {
     const val FORM = "form"
     const val HELLO = "hello"
     const val GADGETS = "gadgets"
+    const val ADD_GADGET = "add_gadget"
 }
