@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.prog7313.sandbox.ui.GadgetViewModel
 import com.prog7313.sandbox.util.shareGadget
+import com.prog7313.sandbox.viewmodel.GadgetViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

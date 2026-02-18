@@ -11,8 +11,8 @@ import com.prog7313.sandbox.model.Gadget
 import com.prog7313.sandbox.ui.FormScreen
 import com.prog7313.sandbox.ui.HelloScreen
 import com.prog7313.sandbox.viewmodel.PersonViewModel
-import com.prog7313.sandbox.ui.GadgetViewModel
 import com.prog7313.sandbox.ui.HomeScreen
+import com.prog7313.sandbox.viewmodel.GadgetViewModel
 
 @Composable
 fun AppNavGraph(

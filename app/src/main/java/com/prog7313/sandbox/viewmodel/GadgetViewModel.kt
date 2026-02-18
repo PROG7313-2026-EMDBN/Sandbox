@@ -1,17 +1,32 @@
-package com.prog7313.sandbox.ui
+package com.prog7313.sandbox.viewmodel
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import com.prog7313.sandbox.data.GadgetJsonStore
+import com.prog7313.sandbox.model.Gadget
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import com.prog7313.sandbox.model.Gadget
-import com.prog7313.sandbox.model.sampleGadgets
+import kotlinx.coroutines.launch
 
-class GadgetViewModel : ViewModel() {
-    private val _gadgets = MutableStateFlow(sampleGadgets)
+class GadgetViewModel(app: Application) : AndroidViewModel(app) {
+    private val store = GadgetJsonStore(app.applicationContext)
+    private val _gadgets = MutableStateFlow<List<Gadget>>(emptyList())
     val gadgets: StateFlow<List<Gadget>> = _gadgets.asStateFlow()
 
+    init {
+        viewModelScope.launch {
+            _gadgets.value = store.load()
+        }
+    }
+
     fun addGadget(gadget: Gadget) {
-        _gadgets.value = _gadgets.value + gadget
+        val updated = _gadgets.value + gadget
+        _gadgets.value = updated
+
+        viewModelScope.launch {
+            store.save(updated)
+        }
     }
 }

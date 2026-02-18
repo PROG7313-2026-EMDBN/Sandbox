@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.prog7313.sandbox.model.Gadget
+import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -120,6 +121,7 @@ fun AddGadgetScreen(
                 onClick = {
                     onSave(
                         Gadget(
+                            id = UUID.randomUUID().toString(),
                             name = name.trim(),
                             brand = brand.trim(),
                             category = category.trim(),

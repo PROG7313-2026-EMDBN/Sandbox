@@ -1,10 +1,16 @@
 package com.prog7313.sandbox.ui
 
+import android.graphics.BitmapFactory
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -21,6 +27,10 @@ fun HomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text("Sandbox Home", style = MaterialTheme.typography.headlineMedium)
+
+        Spacer(Modifier.height(20.dp))
+
+        AssetImage("code.jpg")
 
         Spacer(Modifier.height(20.dp))
 
@@ -43,4 +53,24 @@ fun HomeScreen(
             modifier = Modifier.fillMaxWidth()
         ) { Text("Exit") }
     }
+}
+
+@Composable
+fun AssetImage(imageName: String) {
+    val context = LocalContext.current
+
+    val bitmap = remember(imageName) {
+        context.assets.open("images/$imageName").use { input ->
+            BitmapFactory.decodeStream(input)
+        }
+    }
+
+    Image(
+        bitmap = bitmap.asImageBitmap(),
+        contentDescription = imageName,
+        modifier = Modifier
+            .fillMaxWidth(0.50f)
+            .height(250.dp),
+        contentScale = ContentScale.Fit
+    )
 }
