@@ -30,110 +30,96 @@ fun AddGadgetScreen(
 
     val canSave = name.isNotBlank() && brand.isNotBlank() && category.isNotBlank() && priceIsValid
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Add Gadget") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
-        }
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        OutlinedTextField(
+            value = name,
+            onValueChange = { name = it },
+            label = { Text("Name") },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        OutlinedTextField(
+            value = brand,
+            onValueChange = { brand = it },
+            label = { Text("Brand") },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        ExposedDropdownMenuBox(
+            expanded = categoryExpanded,
+            onExpandedChange = { categoryExpanded = !categoryExpanded },
+            modifier = Modifier.fillMaxWidth()
         ) {
             OutlinedTextField(
-                value = name,
-                onValueChange = { name = it },
-                label = { Text("Name") },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
+                value = category,
+                onValueChange = {},
+                readOnly = true,
+                label = { Text("Category") },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = categoryExpanded) },
+                modifier = Modifier
+                    .menuAnchor(
+                        type = MenuAnchorType.PrimaryNotEditable,
+                        enabled = true
+                    )
+                    .fillMaxWidth()
             )
 
-            OutlinedTextField(
-                value = brand,
-                onValueChange = { brand = it },
-                label = { Text("Brand") },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            ExposedDropdownMenuBox(
+            ExposedDropdownMenu(
                 expanded = categoryExpanded,
-                onExpandedChange = { categoryExpanded = !categoryExpanded },
-                modifier = Modifier.fillMaxWidth()
+                onDismissRequest = { categoryExpanded = false }
             ) {
-                OutlinedTextField(
-                    value = category,
-                    onValueChange = {},
-                    readOnly = true,
-                    label = { Text("Category") },
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = categoryExpanded) },
-                    modifier = Modifier
-                        .menuAnchor(
-                            type = MenuAnchorType.PrimaryNotEditable,
-                            enabled = true
-                        )
-                        .fillMaxWidth()
-                )
-
-                ExposedDropdownMenu(
-                    expanded = categoryExpanded,
-                    onDismissRequest = { categoryExpanded = false }
-                ) {
-                    categories.forEach { option ->
-                        DropdownMenuItem(
-                            text = { Text(option) },
-                            onClick = {
-                                category = option
-                                categoryExpanded = false
-                            }
-                        )
-                    }
+                categories.forEach { option ->
+                    DropdownMenuItem(
+                        text = { Text(option) },
+                        onClick = {
+                            category = option
+                            categoryExpanded = false
+                        }
+                    )
                 }
             }
+        }
 
-            OutlinedTextField(
-                value = priceText,
-                onValueChange = { input ->
-                    priceText = sanitizeMoneyInput(input)
-                },
-                label = { Text("Price (R)") },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                isError = priceText.isNotBlank() && !priceIsValid,
-                supportingText = {
-                    if (priceText.isNotBlank() && !priceIsValid) {
-                        Text("Enter a valid amount (e.g., 1499.99)")
-                    }
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
+        OutlinedTextField(
+            value = priceText,
+            onValueChange = { input ->
+                priceText = sanitizeMoneyInput(input)
+            },
+            label = { Text("Price (R)") },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            isError = priceText.isNotBlank() && !priceIsValid,
+            supportingText = {
+                if (priceText.isNotBlank() && !priceIsValid) {
+                    Text("Enter a valid amount (e.g., 1499.99)")
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
 
-            Button(
-                onClick = {
-                    onSave(
-                        Gadget(
-                            id = UUID.randomUUID().toString(),
-                            name = name.trim(),
-                            brand = brand.trim(),
-                            category = category.trim(),
-                            price = price!!
-                        )
+        Button(
+            onClick = {
+                onSave(
+                    Gadget(
+                        id = UUID.randomUUID().toString(),
+                        name = name.trim(),
+                        brand = brand.trim(),
+                        category = category.trim(),
+                        price = price!!
                     )
-                },
-                enabled = canSave,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Save")
-            }
+                )
+            },
+            enabled = canSave,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Save")
         }
     }
 }

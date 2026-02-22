@@ -26,48 +26,29 @@ fun GadgetsScreen(
     val gadgetsState = gadgetVm.gadgets.collectAsStateWithLifecycle()
     val gadgets = gadgetsState.value
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Gadgets") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                actions = {
-                    IconButton(onClick = onAdd) {
-                        Icon(Icons.Filled.Add, contentDescription = "Add gadget")
-                    }
-                }
-            )
-        }
-    ) { padding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(16.dp)
-        ) {
-            items(
-                items = gadgets,
-                key = { it.id }
-            ) { g ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 6.dp)
-                        .clickable { shareGadget(context, g) }
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text(g.name, style = MaterialTheme.typography.titleMedium)
-                        Spacer(Modifier.height(4.dp))
-                        Text("${g.brand} • ${g.category}", style = MaterialTheme.typography.bodyMedium)
-                        Spacer(Modifier.height(6.dp))
-                        Text("R${"%.2f".format(g.price)}", style = MaterialTheme.typography.bodyLarge)
-                        Spacer(Modifier.height(6.dp))
-                        Text("Tap to share", style = MaterialTheme.typography.labelSmall)
-                    }
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        items(
+            items = gadgets,
+            key = { it.id }
+        ) { g ->
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 6.dp)
+                    .clickable { shareGadget(context, g) }
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(g.name, style = MaterialTheme.typography.titleMedium)
+                    Spacer(Modifier.height(4.dp))
+                    Text("${g.brand} • ${g.category}", style = MaterialTheme.typography.bodyMedium)
+                    Spacer(Modifier.height(6.dp))
+                    Text("R${"%.2f".format(g.price)}", style = MaterialTheme.typography.bodyLarge)
+                    Spacer(Modifier.height(6.dp))
+                    Text("Tap to share", style = MaterialTheme.typography.labelSmall)
                 }
             }
         }

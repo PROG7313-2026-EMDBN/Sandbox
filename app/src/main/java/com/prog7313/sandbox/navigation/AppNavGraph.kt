@@ -23,47 +23,55 @@ fun AppNavGraph(
 
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = Routes.HOME) {
+    AppScaffold(
+        navController = navController,
+        onExit = onExit
+    ) { contentModifier ->
+        NavHost(
+            navController = navController,
+            startDestination = Routes.HOME,
+            modifier = contentModifier
+        ) {
+            composable(Routes.HOME) {
+                HomeScreen(
+                    onOpenForm = { navController.navigate(Routes.FORM) },
+                    onOpenGadgets = { navController.navigate(Routes.GADGETS) },
+                    onExit = onExit
+                )
+            }
 
-        composable(Routes.HOME) {
-            HomeScreen(
-                onOpenForm = { navController.navigate(Routes.FORM) },
-                onOpenGadgets = { navController.navigate(Routes.GADGETS) },
-                onExit = onExit
-            )
-        }
+            composable(Routes.FORM) {
+                FormScreen(
+                    personVm = personVm,
+                    onContinue = { navController.navigate(Routes.HELLO) },
+                    onBack = { navController.popBackStack() }
+                )
+            }
 
-        composable(Routes.FORM) {
-            FormScreen(
-                personVm = personVm,
-                onContinue = { navController.navigate(Routes.HELLO) },
-                onBack = { navController.popBackStack() }
-            )
-        }
+            composable(Routes.HELLO) {
+                HelloScreen(
+                    personVm = personVm,
+                    onBack = { navController.popBackStack() }
+                )
+            }
 
-        composable(Routes.HELLO) {
-            HelloScreen(
-                personVm = personVm,
-                onBack = { navController.popBackStack() }
-            )
-        }
+            composable(Routes.GADGETS) {
+                GadgetsScreen(
+                    gadgetVm = gadgetVm,
+                    onBack = { navController.popBackStack() },
+                    onAdd = { navController.navigate(Routes.ADD_GADGET) }
+                )
+            }
 
-        composable(Routes.GADGETS) {
-            GadgetsScreen(
-                gadgetVm = gadgetVm,
-                onBack = { navController.popBackStack() },
-                onAdd = { navController.navigate(Routes.ADD_GADGET) }
-            )
-        }
-
-        composable(Routes.ADD_GADGET) {
-            AddGadgetScreen(
-                onBack = { navController.popBackStack() },
-                onSave = { newGadget: Gadget ->
-                    gadgetVm.addGadget(newGadget)
-                    navController.popBackStack()
-                }
-            )
+            composable(Routes.ADD_GADGET) {
+                AddGadgetScreen(
+                    onBack = { navController.popBackStack() },
+                    onSave = { newGadget: Gadget ->
+                        gadgetVm.addGadget(newGadget)
+                        navController.popBackStack()
+                    }
+                )
+            }
         }
     }
 }
