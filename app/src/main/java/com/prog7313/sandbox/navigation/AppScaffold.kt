@@ -32,7 +32,8 @@ fun AppScaffold(
     val topLevelRoutes = setOf(
         Routes.HOME,
         Routes.GADGETS,
-        Routes.FORM
+        Routes.FORM,
+        Routes.SETTINGS
     )
 
     val isTopLevel = currentRoute in topLevelRoutes
@@ -45,6 +46,7 @@ fun AppScaffold(
         Routes.HELLO -> "Welcome"
         Routes.GADGETS -> "Gadgets"
         Routes.ADD_GADGET -> "Add Gadget"
+        Routes.SETTINGS -> "Settings"
         else -> "Sandbox"
     }
 
@@ -89,6 +91,15 @@ fun AppScaffold(
 
                 HorizontalDivider(
                     modifier = Modifier.padding(16.dp)
+                )
+
+                NavigationDrawerItem(
+                    label = { Text("Settings") },
+                    selected = currentRoute == Routes.SETTINGS,
+                    onClick = {
+                        scope.launch { drawerState.close() }
+                        navController.navigate(Routes.SETTINGS) { launchSingleTop = true }
+                    }
                 )
 
                 NavigationDrawerItem(

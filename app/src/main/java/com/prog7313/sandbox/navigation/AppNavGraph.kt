@@ -16,6 +16,7 @@ import com.prog7313.sandbox.viewmodel.GadgetViewModel
 
 @Composable
 fun AppNavGraph(
+    settingsVm: com.prog7313.sandbox.viewmodel.SettingsViewModel,
     onExit: () -> Unit
 ) {
     val personVm: PersonViewModel = viewModel()
@@ -71,6 +72,10 @@ fun AppNavGraph(
                         navController.popBackStack()
                     }
                 )
+            }
+
+            composable(Routes.SETTINGS) {
+                com.prog7313.sandbox.ui.SettingsScreen(settingsVm = settingsVm)
             }
         }
     }
