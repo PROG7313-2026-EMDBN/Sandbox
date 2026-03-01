@@ -13,6 +13,7 @@ import com.prog7313.sandbox.ui.HelloScreen
 import com.prog7313.sandbox.viewmodel.PersonViewModel
 import com.prog7313.sandbox.ui.HomeScreen
 import com.prog7313.sandbox.viewmodel.GadgetViewModel
+import com.prog7313.sandbox.ui.FocusLogScreen
 
 @Composable
 fun AppNavGraph(
@@ -37,6 +38,7 @@ fun AppNavGraph(
                 HomeScreen(
                     onOpenForm = { navController.navigate(Routes.FORM) },
                     onOpenGadgets = { navController.navigate(Routes.GADGETS) },
+                    onOpenFocusLog = { navController.navigate(Routes.FOCUSLOG) },
                     onExit = onExit
                 )
             }
@@ -76,6 +78,12 @@ fun AppNavGraph(
 
             composable(Routes.SETTINGS) {
                 com.prog7313.sandbox.ui.SettingsScreen(settingsVm = settingsVm)
+            }
+
+            composable(Routes.FOCUSLOG) {
+                FocusLogScreen(
+                    onBack = { navController.popBackStack() }
+                )
             }
         }
     }

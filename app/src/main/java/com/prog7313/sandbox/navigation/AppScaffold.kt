@@ -89,6 +89,15 @@ fun AppScaffold(
                     }
                 )
 
+                NavigationDrawerItem(
+                    label = { Text("Focus Log") },
+                    selected = currentRoute == Routes.FOCUSLOG,
+                    onClick = {
+                        scope.launch { drawerState.close() }
+                        navController.navigate(Routes.FOCUSLOG) { launchSingleTop = true }
+                    }
+                )
+
                 HorizontalDivider(
                     modifier = Modifier.padding(16.dp)
                 )

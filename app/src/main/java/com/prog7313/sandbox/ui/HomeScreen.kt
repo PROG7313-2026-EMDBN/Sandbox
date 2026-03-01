@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 fun HomeScreen(
     onOpenForm: () -> Unit,
     onOpenGadgets: () -> Unit,
+    onOpenFocusLog: () -> Unit,
     onExit: () -> Unit
 ) {
     Column(
@@ -45,6 +46,13 @@ fun HomeScreen(
             onClick = onOpenGadgets,
             modifier = Modifier.fillMaxWidth()
         ) { Text("Open Gadgets") }
+
+        Spacer(Modifier.height(12.dp))
+
+        Button(
+            onClick = onOpenFocusLog,
+            modifier = Modifier.fillMaxWidth()
+        ) { Text("Open Focus Log") }
 
         Spacer(Modifier.height(24.dp))
 

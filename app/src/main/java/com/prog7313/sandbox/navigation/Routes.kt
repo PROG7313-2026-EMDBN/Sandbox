@@ -6,6 +6,6 @@ object Routes {
     const val HELLO = "hello"
     const val GADGETS = "gadgets"
     const val ADD_GADGET = "add_gadget"
-
     const val SETTINGS = "settings"
+    const val FOCUSLOG = "focuslog"
 }
