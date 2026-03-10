@@ -13,7 +13,10 @@ class FocusLogVmFactory(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val db = SandboxDb.get(appContext)
-        val repo = FocusLogRepository(db.focusSessionDao())
+        val repo = FocusLogRepository(
+            dayDao = db.focusDayDao(),
+            sessionDao = db.focusSessionDao()
+        )
         return FocusLogViewModel(repo) as T
     }
 }

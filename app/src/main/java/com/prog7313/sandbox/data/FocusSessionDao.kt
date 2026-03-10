@@ -17,9 +17,20 @@ interface FocusSessionDao {
     @Delete
     suspend fun delete(session: FocusSession)
 
-    @Query("SELECT * FROM focus_sessions ORDER BY createdAt DESC")
-    fun observeAll(): Flow<List<FocusSession>>
+    @Query("""
+        SELECT * FROM focus_sessions
+        WHERE dayId = :dayId
+        ORDER BY createdAt DESC
+    """)
+    fun observeSessionsForDay(dayId: Long): Flow<List<FocusSession>>
 
-    @Query("SELECT COALESCE(SUM(minutes), 0) FROM focus_sessions")
-    fun observeTotalMinutes(): Flow<Int>
+    @Query("""
+        SELECT COALESCE(SUM(minutes), 0)
+        FROM focus_sessions
+        WHERE dayId = :dayId
+    """)
+    fun observeTotalMinutesForDay(dayId: Long): Flow<Int>
+
+    @Query("DELETE FROM focus_sessions WHERE dayId = :dayId")
+    suspend fun deleteAllForDay(dayId: Long)
 }

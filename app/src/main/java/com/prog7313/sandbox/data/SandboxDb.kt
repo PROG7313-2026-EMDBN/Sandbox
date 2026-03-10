@@ -4,19 +4,22 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.prog7313.sandbox.model.FocusDay
 import com.prog7313.sandbox.model.FocusSession
 
 @Database(
-    entities = [FocusSession::class],
-    version = 1,
+    entities = [FocusDay::class, FocusSession::class],
+    version = 2,
     exportSchema = false
 )
 abstract class SandboxDb : RoomDatabase() {
 
+    abstract fun focusDayDao(): FocusDayDao
     abstract fun focusSessionDao(): FocusSessionDao
 
     companion object {
-        @Volatile private var INSTANCE: SandboxDb? = null
+        @Volatile
+        private var INSTANCE: SandboxDb? = null
 
         fun get(context: Context): SandboxDb {
             return INSTANCE ?: synchronized(this) {
@@ -24,7 +27,10 @@ abstract class SandboxDb : RoomDatabase() {
                     context.applicationContext,
                     SandboxDb::class.java,
                     "sandbox.db"
-                ).build().also { INSTANCE = it }
+                )
+                    .fallbackToDestructiveMigration(false)
+                    .build()
+                    .also { INSTANCE = it }
             }
         }
     }
