@@ -22,10 +22,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.prog7313.sandbox" />
+                  <option name="mobileSdkAppId" value="1:282969099275:android:e1ee791ba47004ae0f0b0e" />
+                  <option name="projectId" value="prog7313-sandbox" />
+                  <option name="projectNumber" value="282969099275" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
