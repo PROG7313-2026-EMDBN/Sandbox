@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 fun AppScaffold(
     navController: NavHostController,
     onExit: () -> Unit,
+    onLogout: () -> Unit,
     content: @Composable (Modifier) -> Unit
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -108,6 +109,15 @@ fun AppScaffold(
                     onClick = {
                         scope.launch { drawerState.close() }
                         navController.navigate(Routes.SETTINGS) { launchSingleTop = true }
+                    }
+                )
+
+                NavigationDrawerItem(
+                    label = { Text("Logout") },
+                    selected = false,
+                    onClick = {
+                        scope.launch { drawerState.close() }
+                        onLogout()
                     }
                 )
 

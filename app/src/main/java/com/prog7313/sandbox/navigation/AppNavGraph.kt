@@ -18,7 +18,8 @@ import com.prog7313.sandbox.ui.FocusLogScreen
 @Composable
 fun AppNavGraph(
     settingsVm: com.prog7313.sandbox.viewmodel.SettingsViewModel,
-    onExit: () -> Unit
+    onExit: () -> Unit,
+    onLogout: () -> Unit
 ) {
     val personVm: PersonViewModel = viewModel()
     val gadgetVm: GadgetViewModel = viewModel()
@@ -27,7 +28,8 @@ fun AppNavGraph(
 
     AppScaffold(
         navController = navController,
-        onExit = onExit
+        onExit = onExit,
+        onLogout = onLogout
     ) { contentModifier ->
         NavHost(
             navController = navController,
