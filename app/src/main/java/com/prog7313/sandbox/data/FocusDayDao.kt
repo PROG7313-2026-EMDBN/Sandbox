@@ -12,6 +12,10 @@ interface FocusDayDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(day: FocusDay): Long
 
-    @Query("SELECT * FROM focus_days WHERE date = :date LIMIT 1")
-    suspend fun getByDate(date: String): FocusDay?
+    @Query("""
+        SELECT * FROM focus_days
+        WHERE date = :date AND firebaseUuid = :firebaseUuid
+        LIMIT 1
+    """)
+    suspend fun getByDateAndUser(date: String, firebaseUuid: String): FocusDay?
 }

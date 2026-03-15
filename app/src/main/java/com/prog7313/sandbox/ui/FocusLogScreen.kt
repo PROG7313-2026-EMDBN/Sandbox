@@ -37,10 +37,11 @@ import com.prog7313.sandbox.viewmodel.FocusLogVmFactory
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FocusLogScreen(
+    firebaseUuid: String,
     onBack: () -> Unit
 ) {
     val context = LocalContext.current.applicationContext
-    val vm: FocusLogViewModel = viewModel(factory = FocusLogVmFactory(context))
+    val vm: FocusLogViewModel = viewModel(factory = FocusLogVmFactory(context, firebaseUuid))
     val state by vm.uiState.collectAsState()
 
     var title by remember { mutableStateOf("") }

@@ -9,7 +9,7 @@ import com.prog7313.sandbox.model.FocusSession
 
 @Database(
     entities = [FocusDay::class, FocusSession::class],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 abstract class SandboxDb : RoomDatabase() {

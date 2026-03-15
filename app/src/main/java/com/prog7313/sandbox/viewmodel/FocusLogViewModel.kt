@@ -1,6 +1,5 @@
 package com.prog7313.sandbox.viewmodel
 
-import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.prog7313.sandbox.data.FocusLogRepository
@@ -16,18 +15,25 @@ import java.util.Date
 import java.util.Locale
 
 class FocusLogViewModel(
-    private val repo: FocusLogRepository
+    private val repo: FocusLogRepository,
+    private val firebaseUuid: String
 ) : ViewModel() {
+
+    private fun todayString(): String {
+        return SimpleDateFormat(
+            "yyyy-MM-dd",
+            Locale.getDefault()
+        ).format(Date())
+    }
 
     private val _uiState = MutableStateFlow(
         FocusLogUiState(
-            todayLabel = SimpleDateFormat(
-                "yyyy-MM-dd",
-                Locale.getDefault()
-            ).format(Date()),
+            todayLabel = todayString(),
+            firebaseUuid = firebaseUuid,
             isLoading = true
         )
     )
+
     val uiState: StateFlow<FocusLogUiState> = _uiState.asStateFlow()
 
     init {
@@ -36,16 +42,17 @@ class FocusLogViewModel(
 
     private fun loadToday() {
         viewModelScope.launch {
-            val today = SimpleDateFormat(
-                "yyyy-MM-dd",
-                Locale.getDefault()
-            ).format(Date())
+            val today = todayString()
 
-            val day = repo.getOrCreateDay(today)
+            val day = repo.getOrCreateDay(
+                date = today,
+                firebaseUuid = firebaseUuid
+            )
 
             _uiState.update {
                 it.copy(
                     todayLabel = today,
+                    firebaseUuid = firebaseUuid,
                     currentDayId = day.id,
                     isLoading = false
                 )
@@ -57,6 +64,7 @@ class FocusLogViewModel(
             ) { sessions, total ->
                 FocusLogUiState(
                     todayLabel = today,
+                    firebaseUuid = firebaseUuid,
                     currentDayId = day.id,
                     sessions = sessions,
                     totalMinutes = total,
@@ -73,11 +81,17 @@ class FocusLogViewModel(
         val minutes = minutesText.toIntOrNull()
         val dayId = _uiState.value.currentDayId ?: return
 
+        if (firebaseUuid.isBlank()) return
         if (cleanTitle.isBlank()) return
         if (minutes == null || minutes <= 0) return
 
         viewModelScope.launch {
-            repo.addSession(cleanTitle, minutes, dayId)
+            repo.addSession(
+                title = cleanTitle,
+                minutes = minutes,
+                dayId = dayId,
+                firebaseUuid = firebaseUuid
+            )
         }
     }
 

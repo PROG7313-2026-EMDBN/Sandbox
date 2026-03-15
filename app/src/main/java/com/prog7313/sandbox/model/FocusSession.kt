@@ -15,9 +15,11 @@ import androidx.room.PrimaryKey
             onDelete = ForeignKey.CASCADE
         )
     ],
-    indices = [Index(value = ["dayId"])]
+    indices = [
+        Index(value = ["dayId"]),
+        Index(value = ["firebaseUuid"])
+    ]
 )
-
 data class FocusSession(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
@@ -25,5 +27,6 @@ data class FocusSession(
     val title: String,
     val minutes: Int,
     val dayId: Long,
+    val firebaseUuid: String,
     val createdAt: Long = System.currentTimeMillis()
 )

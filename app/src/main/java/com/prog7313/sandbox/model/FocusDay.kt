@@ -8,5 +8,6 @@ data class FocusDay(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
 
-    val date: String
+    val date: String,
+    val firebaseUuid: String
 )

@@ -9,12 +9,22 @@ class FocusLogRepository(
     private val sessionDao: FocusSessionDao
 ) {
 
-    suspend fun getOrCreateDay(date: String): FocusDay {
-        val existing = dayDao.getByDate(date)
+    suspend fun getOrCreateDay(date: String, firebaseUuid: String): FocusDay {
+        val existing = dayDao.getByDateAndUser(date, firebaseUuid)
         if (existing != null) return existing
 
-        val newId = dayDao.insert(FocusDay(date = date))
-        return FocusDay(id = newId, date = date)
+        val newId = dayDao.insert(
+            FocusDay(
+                date = date,
+                firebaseUuid = firebaseUuid
+            )
+        )
+
+        return FocusDay(
+            id = newId,
+            date = date,
+            firebaseUuid = firebaseUuid
+        )
     }
 
     fun observeSessionsForDay(dayId: Long): Flow<List<FocusSession>> {
@@ -25,12 +35,13 @@ class FocusLogRepository(
         return sessionDao.observeTotalMinutesForDay(dayId)
     }
 
-    suspend fun addSession(title: String, minutes: Int, dayId: Long) {
+    suspend fun addSession(title: String, minutes: Int, dayId: Long, firebaseUuid: String) {
         sessionDao.insert(
             FocusSession(
                 title = title.trim(),
                 minutes = minutes,
-                dayId = dayId
+                dayId = dayId,
+                firebaseUuid = firebaseUuid
             )
         )
     }

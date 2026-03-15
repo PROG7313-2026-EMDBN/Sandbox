@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.auth.FirebaseAuth
 import com.prog7313.sandbox.model.Gadget
 import com.prog7313.sandbox.ui.FormScreen
 import com.prog7313.sandbox.ui.HelloScreen
@@ -25,6 +26,8 @@ fun AppNavGraph(
     val gadgetVm: GadgetViewModel = viewModel()
 
     val navController = rememberNavController()
+
+    val currentFirebaseUuid = FirebaseAuth.getInstance().currentUser?.uid.orEmpty()
 
     AppScaffold(
         navController = navController,
@@ -84,6 +87,7 @@ fun AppNavGraph(
 
             composable(Routes.FOCUSLOG) {
                 FocusLogScreen(
+                    firebaseUuid = currentFirebaseUuid,
                     onBack = { navController.popBackStack() }
                 )
             }

@@ -7,7 +7,8 @@ import com.prog7313.sandbox.data.FocusLogRepository
 import com.prog7313.sandbox.data.SandboxDb
 
 class FocusLogVmFactory(
-    private val appContext: Context
+    private val appContext: Context,
+    private val firebaseUuid: String
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
@@ -17,6 +18,6 @@ class FocusLogVmFactory(
             dayDao = db.focusDayDao(),
             sessionDao = db.focusSessionDao()
         )
-        return FocusLogViewModel(repo) as T
+        return FocusLogViewModel(repo, firebaseUuid) as T
     }
 }
