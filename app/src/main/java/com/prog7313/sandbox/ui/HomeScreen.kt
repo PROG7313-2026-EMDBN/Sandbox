@@ -18,6 +18,7 @@ fun HomeScreen(
     onOpenForm: () -> Unit,
     onOpenGadgets: () -> Unit,
     onOpenFocusLog: () -> Unit,
+    onOpenNotifications: () -> Unit,
     onExit: () -> Unit
 ) {
     Column(
@@ -30,9 +31,7 @@ fun HomeScreen(
         Text("Sandbox Home", style = MaterialTheme.typography.headlineMedium)
 
         Spacer(Modifier.height(20.dp))
-
         AssetImage("code.jpg")
-
         Spacer(Modifier.height(20.dp))
 
         Button(
@@ -53,6 +52,13 @@ fun HomeScreen(
             onClick = onOpenFocusLog,
             modifier = Modifier.fillMaxWidth()
         ) { Text("Open Focus Log") }
+
+        Spacer(Modifier.height(12.dp))
+
+        Button(
+            onClick = onOpenNotifications,
+            modifier = Modifier.fillMaxWidth()
+        ) { Text("Open Notifications Demo") }
 
         Spacer(Modifier.height(24.dp))
 

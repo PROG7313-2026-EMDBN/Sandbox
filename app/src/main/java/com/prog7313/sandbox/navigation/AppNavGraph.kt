@@ -13,20 +13,21 @@ import com.prog7313.sandbox.ui.FormScreen
 import com.prog7313.sandbox.ui.HelloScreen
 import com.prog7313.sandbox.viewmodel.PersonViewModel
 import com.prog7313.sandbox.ui.HomeScreen
+import com.prog7313.sandbox.ui.NotificationDemoScreen
+import com.prog7313.sandbox.ui.SettingsScreen
 import com.prog7313.sandbox.viewmodel.GadgetViewModel
 import com.prog7313.sandbox.ui.FocusLogScreen
+import com.prog7313.sandbox.viewmodel.SettingsViewModel
 
 @Composable
 fun AppNavGraph(
-    settingsVm: com.prog7313.sandbox.viewmodel.SettingsViewModel,
+    settingsVm: SettingsViewModel,
     onExit: () -> Unit,
     onLogout: () -> Unit
 ) {
     val personVm: PersonViewModel = viewModel()
     val gadgetVm: GadgetViewModel = viewModel()
-
     val navController = rememberNavController()
-
     val currentFirebaseUuid = FirebaseAuth.getInstance().currentUser?.uid.orEmpty()
 
     AppScaffold(
@@ -44,6 +45,7 @@ fun AppNavGraph(
                     onOpenForm = { navController.navigate(Routes.FORM) },
                     onOpenGadgets = { navController.navigate(Routes.GADGETS) },
                     onOpenFocusLog = { navController.navigate(Routes.FOCUSLOG) },
+                    onOpenNotifications = { navController.navigate(Routes.NOTIFICATIONS) },
                     onExit = onExit
                 )
             }
@@ -82,7 +84,7 @@ fun AppNavGraph(
             }
 
             composable(Routes.SETTINGS) {
-                com.prog7313.sandbox.ui.SettingsScreen(settingsVm = settingsVm)
+                SettingsScreen(settingsVm = settingsVm)
             }
 
             composable(Routes.FOCUSLOG) {
@@ -90,6 +92,10 @@ fun AppNavGraph(
                     firebaseUuid = currentFirebaseUuid,
                     onBack = { navController.popBackStack() }
                 )
+            }
+
+            composable(Routes.NOTIFICATIONS) {
+                NotificationDemoScreen()
             }
         }
     }

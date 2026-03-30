@@ -8,7 +8,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -34,11 +33,12 @@ fun AppScaffold(
         Routes.HOME,
         Routes.GADGETS,
         Routes.FORM,
-        Routes.SETTINGS
+        Routes.SETTINGS,
+        Routes.FOCUSLOG,
+        Routes.NOTIFICATIONS
     )
 
     val isTopLevel = currentRoute in topLevelRoutes
-
     val canGoBack = navController.previousBackStackEntry != null
 
     val title = when (currentRoute) {
@@ -48,6 +48,8 @@ fun AppScaffold(
         Routes.GADGETS -> "Gadgets"
         Routes.ADD_GADGET -> "Add Gadget"
         Routes.SETTINGS -> "Settings"
+        Routes.FOCUSLOG -> "Focus Log"
+        Routes.NOTIFICATIONS -> "Notifications"
         else -> "Sandbox"
     }
 
@@ -96,6 +98,15 @@ fun AppScaffold(
                     onClick = {
                         scope.launch { drawerState.close() }
                         navController.navigate(Routes.FOCUSLOG) { launchSingleTop = true }
+                    }
+                )
+
+                NavigationDrawerItem(
+                    label = { Text("Notifications") },
+                    selected = currentRoute == Routes.NOTIFICATIONS,
+                    onClick = {
+                        scope.launch { drawerState.close() }
+                        navController.navigate(Routes.NOTIFICATIONS) { launchSingleTop = true }
                     }
                 )
 

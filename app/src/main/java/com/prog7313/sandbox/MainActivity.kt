@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.prog7313.sandbox.navigation.AppNavGraph
+import com.prog7313.sandbox.notifications.NotificationHelper
 import com.prog7313.sandbox.theme.SandBoxTheme
 import com.prog7313.sandbox.ui.AuthScreen
 import com.prog7313.sandbox.viewmodel.SettingsViewModel
@@ -16,6 +17,9 @@ import com.prog7313.sandbox.viewmodel.SettingsViewModel
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        NotificationHelper.createChannel(this)
+
         enableEdgeToEdge()
 
         setContent {

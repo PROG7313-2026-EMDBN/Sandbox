@@ -8,4 +8,5 @@ object Routes {
     const val ADD_GADGET = "add_gadget"
     const val SETTINGS = "settings"
     const val FOCUSLOG = "focuslog"
+    const val NOTIFICATIONS = "notifications"
 }
