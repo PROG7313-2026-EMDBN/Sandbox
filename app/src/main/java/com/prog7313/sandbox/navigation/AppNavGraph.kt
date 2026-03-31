@@ -17,6 +17,7 @@ import com.prog7313.sandbox.ui.NotificationDemoScreen
 import com.prog7313.sandbox.ui.SettingsScreen
 import com.prog7313.sandbox.viewmodel.GadgetViewModel
 import com.prog7313.sandbox.ui.FocusLogScreen
+import com.prog7313.sandbox.ui.ProfileScreen
 import com.prog7313.sandbox.viewmodel.SettingsViewModel
 
 @Composable
@@ -46,6 +47,7 @@ fun AppNavGraph(
                     onOpenGadgets = { navController.navigate(Routes.GADGETS) },
                     onOpenFocusLog = { navController.navigate(Routes.FOCUSLOG) },
                     onOpenNotifications = { navController.navigate(Routes.NOTIFICATIONS) },
+                    onOpenProfile = { navController.navigate(Routes.PROFILE) },
                     onExit = onExit
                 )
             }
@@ -96,6 +98,12 @@ fun AppNavGraph(
 
             composable(Routes.NOTIFICATIONS) {
                 NotificationDemoScreen()
+            }
+
+            composable(Routes.PROFILE) {
+                ProfileScreen(
+                    onBack = { navController.popBackStack() }
+                )
             }
         }
     }

@@ -35,7 +35,8 @@ fun AppScaffold(
         Routes.FORM,
         Routes.SETTINGS,
         Routes.FOCUSLOG,
-        Routes.NOTIFICATIONS
+        Routes.NOTIFICATIONS,
+        Routes.PROFILE
     )
 
     val isTopLevel = currentRoute in topLevelRoutes
@@ -50,6 +51,7 @@ fun AppScaffold(
         Routes.SETTINGS -> "Settings"
         Routes.FOCUSLOG -> "Focus Log"
         Routes.NOTIFICATIONS -> "Notifications"
+        Routes.PROFILE -> "Profile"
         else -> "Sandbox"
     }
 
@@ -107,6 +109,15 @@ fun AppScaffold(
                     onClick = {
                         scope.launch { drawerState.close() }
                         navController.navigate(Routes.NOTIFICATIONS) { launchSingleTop = true }
+                    }
+                )
+
+                NavigationDrawerItem(
+                    label = { Text("Profile") },
+                    selected = currentRoute == Routes.PROFILE,
+                    onClick = {
+                        scope.launch { drawerState.close() }
+                        navController.navigate(Routes.PROFILE) { launchSingleTop = true }
                     }
                 )
 

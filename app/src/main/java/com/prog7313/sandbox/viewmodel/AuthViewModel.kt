@@ -3,7 +3,7 @@ package com.prog7313.sandbox.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.prog7313.sandbox.data.AuthRepository
-import com.prog7313.sandbox.viewmodel.AuthUiState
+import com.prog7313.sandbox.data.ProfileRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,6 +13,7 @@ class AuthViewModel(
     private val repo: AuthRepository = AuthRepository()
 ) : ViewModel() {
 
+    private val profileRepo = ProfileRepository()
     private val _uiState = MutableStateFlow(
         AuthUiState(isAuthenticated = repo.currentUser != null)
     )
@@ -41,6 +42,11 @@ class AuthViewModel(
             val result = repo.login(email, password)
 
             _uiState.value = if (result.isSuccess) {
+                val user = repo.currentUser
+                if (user != null) {
+                    profileRepo.ensureProfileExists(user.uid, user.email.orEmpty())
+                }
+
                 _uiState.value.copy(
                     isLoading = false,
                     isAuthenticated = true,
@@ -70,6 +76,11 @@ class AuthViewModel(
             val result = repo.register(email, password)
 
             _uiState.value = if (result.isSuccess) {
+                val user = repo.currentUser
+                if (user != null) {
+                    profileRepo.ensureProfileExists(user.uid, user.email.orEmpty())
+                }
+
                 _uiState.value.copy(
                     isLoading = false,
                     isAuthenticated = true,

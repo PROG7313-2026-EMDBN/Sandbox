@@ -19,6 +19,7 @@ fun HomeScreen(
     onOpenGadgets: () -> Unit,
     onOpenFocusLog: () -> Unit,
     onOpenNotifications: () -> Unit,
+    onOpenProfile: () -> Unit,
     onExit: () -> Unit
 ) {
     Column(
@@ -59,6 +60,13 @@ fun HomeScreen(
             onClick = onOpenNotifications,
             modifier = Modifier.fillMaxWidth()
         ) { Text("Open Notifications Demo") }
+
+        Spacer(Modifier.height(12.dp))
+
+        Button(
+            onClick = onOpenProfile,
+            modifier = Modifier.fillMaxWidth()
+        ) { Text("Open Profile") }
 
         Spacer(Modifier.height(24.dp))
 
