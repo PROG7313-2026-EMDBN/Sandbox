@@ -1,13 +1,14 @@
 package com.prog7313.sandbox.viewmodel
 
 import android.app.Application
-import android.util.Log
+import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ValueEventListener
 import com.prog7313.sandbox.data.ProfileRepository
 import com.prog7313.sandbox.model.UserProfile
+import com.prog7313.sandbox.supabase.AvatarStorageService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,6 +18,7 @@ class ProfileViewModel(app: Application) : AndroidViewModel(app) {
 
     private val repo = ProfileRepository()
     private val auth = FirebaseAuth.getInstance()
+    private val avatarStorageService = AvatarStorageService()
 
     private val _uiState = MutableStateFlow(ProfileUiState())
     val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
@@ -53,7 +55,11 @@ class ProfileViewModel(app: Application) : AndroidViewModel(app) {
             return
         }
 
-        _uiState.value = _uiState.value.copy(isLoading = false)
+        _uiState.value = _uiState.value.copy(
+            isLoading = true,
+            error = null,
+            message = null
+        )
 
         viewModelScope.launch {
             try {
@@ -65,39 +71,69 @@ class ProfileViewModel(app: Application) : AndroidViewModel(app) {
                             email = profile.email,
                             displayName = profile.displayName,
                             badgeTitle = profile.badgeTitle,
-                            avatarUrl = profile.avatarUrl
+                            avatarUrl = profile.avatarUrl,
+                            isLoading = false,
+                            error = null
+                        )
+                    } else {
+                        _uiState.value = _uiState.value.copy(
+                            isLoading = false,
+                            error = "Could not load profile"
                         )
                     }
                 }
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
+                    isLoading = false,
                     error = e.message ?: "Could not load profile"
                 )
             }
         }
     }
 
-    fun saveProfile() {
-        val user = auth.currentUser ?: return
+    fun saveProfile(selectedImageUri: Uri? = null) {
+        val user = auth.currentUser
+        if (user == null) {
+            _uiState.value = _uiState.value.copy(error = "No logged in user")
+            return
+        }
+
+        _uiState.value = _uiState.value.copy(
+            isSaving = true,
+            error = null,
+            message = null
+        )
 
         viewModelScope.launch {
             try {
+                val finalAvatarUrl = if (selectedImageUri != null) {
+                    avatarStorageService.uploadAvatar(
+                        context = getApplication(),
+                        imageUri = selectedImageUri
+                    )
+                } else {
+                    _uiState.value.avatarUrl
+                }
+
                 val profile = UserProfile(
                     uid = user.uid,
-                    email = _uiState.value.email,
+                    email = user.email.orEmpty(),
                     displayName = _uiState.value.displayName.trim(),
                     badgeTitle = _uiState.value.badgeTitle.trim(),
-                    avatarUrl = _uiState.value.avatarUrl
+                    avatarUrl = finalAvatarUrl
                 )
 
                 repo.saveProfile(profile)
 
                 _uiState.value = _uiState.value.copy(
+                    avatarUrl = finalAvatarUrl,
+                    isSaving = false,
                     message = "Profile saved",
                     error = null
                 )
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
+                    isSaving = false,
                     error = e.message ?: "Save failed"
                 )
             }

@@ -6,6 +6,7 @@ data class ProfileUiState(
     val badgeTitle: String = "",
     val avatarUrl: String = "",
     val isLoading: Boolean = false,
+    val isSaving: Boolean = false,
     val message: String? = null,
     val error: String? = null
 )

@@ -1,4 +1,4 @@
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -7,6 +7,15 @@ plugins {
     alias(libs.plugins.ksp)
     id("com.google.gms.google-services")
 }
+
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) {
+        file.inputStream().use { load(it) }
+    }
+}
+val supabaseUrl = localProperties.getProperty("SUPABASE_URL", "")
+val supabaseKey = localProperties.getProperty("SUPABASE_PUBLISHABLE_KEY", "")
 
 android {
     namespace = "com.prog7313.sandbox"
@@ -22,6 +31,13 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        vectorDrawables {
+            useSupportLibrary = true
+        }
+
+        buildConfigField("String", "SUPABASE_URL", "\"$supabaseUrl\"")
+        buildConfigField("String", "SUPABASE_KEY", "\"$supabaseKey\"")
     }
 
     buildTypes {
@@ -73,6 +89,11 @@ dependencies {
     implementation("com.google.firebase:firebase-database")
     implementation("io.coil-kt:coil-compose:2.7.0")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
+
+    implementation(platform("io.github.jan-tennert.supabase:bom:3.2.5"))
+    implementation("io.github.jan-tennert.supabase:storage-kt")
+    implementation("io.github.jan-tennert.supabase:postgrest-kt")
+    implementation("io.ktor:ktor-client-android:3.1.3")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
